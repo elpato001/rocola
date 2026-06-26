@@ -56,9 +56,9 @@ function toggleSingerMode(force) {
         isSingerMode = !isSingerMode;
     }
     if (isSingerMode) {
-        overlay.classList.remove('hidden');
+        overlay.style.display = 'flex';
     } else {
-        overlay.classList.add('hidden');
+        overlay.style.display = 'none';
     }
 }
 
@@ -127,6 +127,13 @@ function updateMiniPlayer(item) {
     
     // Load lyrics
     loadLyricsForRemote(item);
+    
+    // Auto Singer Mode for Karaoke
+    if (item.type === 'karaoke') {
+        toggleSingerMode(true);
+    } else {
+        toggleSingerMode(false);
+    }
 }
 
 let remoteCurrentTime = 0;
@@ -222,12 +229,6 @@ function toggleCoverLyrics() {
         document.getElementById('np-cover-container').classList.remove('hidden');
         document.getElementById('np-lyrics-container').style.display = 'none';
         document.getElementById('np-view-toggle').textContent = 'LETRAS';
-        
-        if (state.item.type === 'karaoke') {
-            toggleSingerMode(true);
-        } else {
-            toggleSingerMode(false);
-        }
         
         // Load Cover
         const npCover = document.getElementById('np-large-cover');
