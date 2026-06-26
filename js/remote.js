@@ -145,8 +145,10 @@ function updateProgressBar() {
     // Sync lyrics if showing
     if (showingLyrics && currentLyrics.length > 0) {
         let activeIdx = -1;
+        // Compensación de latencia de red (adelantar 0.5 segundos)
+        const lyricTime = time + 0.5; 
         for (let i = 0; i < currentLyrics.length; i++) {
-            if (time >= currentLyrics[i].time) activeIdx = i;
+            if (lyricTime >= currentLyrics[i].time) activeIdx = i;
             else break;
         }
         
