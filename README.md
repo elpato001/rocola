@@ -53,6 +53,8 @@ Para ejecutar Rocola Multimedia en tu entorno local o servidor, necesitarás:
 4. **Agrega tus archivos:**
    Ve al panel de administrador en el sistema y define las rutas de tus bibliotecas de música, videos y karaoke. El escáner interno se encargará del resto.
 
+   ![Configuración de Bibliotecas](img/library_config.png)
+
 ## 📂 Estructura del Proyecto
 
 ```text
