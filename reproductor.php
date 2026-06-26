@@ -117,7 +117,7 @@
     <button class="fs-minimize-btn" id="fs-minimize-btn" onclick="app.minimizeFullscreenOverlay(event)" title="Minimizar video">
         <i class="fa-solid fa-down-left-and-up-right-to-center"></i>
     </button>
-    <video id="video-player" class="video-element" playsinline></video>
+    <video id="video-player" class="video-element" playsinline onclick="app.togglePlay()" style="cursor: pointer;"></video>
     <div class="video-info-overlay" id="video-info-overlay">
         <h2 id="fs-title">Title</h2>
         <p id="fs-artist">Artist</p>

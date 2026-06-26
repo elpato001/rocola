@@ -535,14 +535,14 @@ body:has(.queue-panel:not(.hidden)) .music-visualizer {
 /* Fullscreen Overlay (Video / Karaoke) */
 .fullscreen-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: var(--player-height);
+    top: 0; left: 0; right: 0; bottom: 0;
     background: #000;
     z-index: 5000;
     display: flex;
     justify-content: center;
     align-items: center;
     opacity: 1;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.5s ease;
 }
 
 .fullscreen-overlay.hidden {
