@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Rocola">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=Rocola&background=1db954&color=fff&size=192">
+    
+    <title>Rocola Remote</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- NoSleep.js for keeping screen awake over HTTP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nosleep/0.12.2/NoSleep.min.js"></script>
+    
+    <!-- Estilos Spotify Style -->
+    <style>
+        :root {
+            --app-bg: #121212;
+            --app-text: #ffffff;
+            --app-secondary-text: #b3b3b3;
+            --app-accent: #1db954;
+            --app-panel: #181818;
+            --app-panel-hover: #282828;
+            --app-border: #282828;
+            
+            --nav-height: 65px;
+            --mini-player-height: 56px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Circular', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--app-bg);
+            color: var(--app-text);
+            overscroll-behavior-y: none;
+            padding-bottom: calc(var(--nav-height) + var(--mini-player-height) + env(safe-area-inset-bottom) + 10px);
+        }
+
+        h1, h2, h3, h4 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .header {
+            padding: 20px 20px 10px;
+            padding-top: calc(20px + env(safe-area-inset-top));
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* Status Light */
+        #status-light {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #555;
+            position: fixed;
+            top: env(safe-area-inset-top, 15px);
+            right: 15px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        #status-light.sending {
+            background: var(--app-accent);
+            box-shadow: 0 0 8px var(--app-accent);
+        }
+
+        /* Views */
+        .view-container {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            padding: 0 15px;
+            animation: fadeIn 0.2s ease;
+        }
+        .view-container.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Secciones */
+        .section-title {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        /* Horizontal Scroll Cards (Top / Genres) */
+        .horizontal-scroll {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin: 0 -15px;
+            padding-left: 15px;
+            padding-right: 15px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
+        
+        .card {
+            min-width: 130px;
+            max-width: 130px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            cursor: pointer;
+            scroll-snap-align: start;
+        }
+        .card img {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: var(--app-panel);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .card.artist img {
+            border-radius: 50%;
+        }
+        .card h4 {
+            font-size: 0.9rem;
+            color: var(--app-text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card p {
+            font-size: 0.8rem;
+            color: var(--app-secondary-text);
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Búsqueda */
+        .search-box {
+            display: flex;
+            background: #242424;
+            border-radius: 4px;
+            padding: 12px 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .search-box i { color: var(--app-secondary-text); margin-right: 10px; font-size: 1.1rem; }
+        .search-box input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: var(--app-text);
+            font-size: 1rem;
+            outline: none;
+        }
+        .search-box input::placeholder { color: var(--app-secondary-text); }
+
+        /* List Items */
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+        .list-item:active { background: rgba(255,255,255,0.1); }
+        .list-item img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            background: var(--app-panel);
+        }
+        .list-item.artist img {
+            border-radius: 50%;
+        }
+        .list-info { flex-grow: 1; overflow: hidden; }
+        .list-info h4 { font-size: 1rem; margin-bottom: 4px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .list-info p { font-size: 0.85rem; color: var(--app-secondary-text); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .list-action { color: var(--app-secondary-text); padding: 10px; }
+
+        /* Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .grid-item { text-align: left; cursor: pointer; }
+        .grid-item img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            background: var(--app-panel);
+            margin-bottom: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .grid-item.artist img { border-radius: 50%; }
+        .grid-item h4 { font-size: 0.9rem; margin-bottom: 2px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .grid-item p { font-size: 0.8rem; color: var(--app-secondary-text); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .btn-back {
+            background: transparent;
+            border: none;
+            color: var(--app-secondary-text);
+            font-size: 1.5rem;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Mini Player Flotante */
+        .mini-player {
+            position: fixed;
+            bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 5px);
+            left: 8px;
+            right: 8px;
+            height: var(--mini-player-height);
+            background: #282828;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 100;
+            cursor: pointer;
+        }
+        .mp-cover {
+            width: 40px; height: 40px;
+            border-radius: 4px;
+            background: var(--app-panel);
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .mp-info {
+            flex-grow: 1;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .mp-info h4 { font-size: 0.85rem; margin: 0; color: #fff; text-overflow: ellipsis; overflow: hidden; }
+        .mp-info p { font-size: 0.75rem; margin: 0; color: var(--app-secondary-text); text-overflow: ellipsis; overflow: hidden; }
+        
+        .mp-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #fff;
+            font-size: 1.1rem;
+            padding-right: 5px;
+        }
+        .mp-controls i { padding: 10px; }
+        .mp-controls i:active { opacity: 0.5; }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: calc(var(--nav-height) + env(safe-area-inset-bottom));
+            background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 100%);
+            display: flex;
+            justify-content: space-around;
+            padding-top: 10px;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 90;
+        }
+        .nav-item {
+            color: var(--app-secondary-text);
+            font-size: 0.65rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            width: 33%;
+        }
+        .nav-item.active {
+            color: #fff;
+        }
+        .nav-item i {
+            font-size: 1.3rem;
+        }
+
+        /* Botones de Volumen */
+        .extended-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .extended-controls button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--app-panel);
+            color: var(--app-text);
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        .extended-controls button:active {
+            background: var(--app-panel-hover);
+        }
+
+        /* Filter Pills */
+        .filter-pills {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scrollbar-width: none;
+        }
+        .filter-pills::-webkit-scrollbar { display: none; }
+        .filter-pill {
+            background: #242424;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .filter-pill.active {
+            background: var(--app-accent);
+            color: #000;
+            font-weight: 500;
+        }
+
+        .library-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        /* Now Playing Overlay */
+        .now-playing-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #121212;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding: 20px;
+            padding-top: calc(20px + env(safe-area-inset-top));
+            overflow: hidden;
+        }
+        .now-playing-overlay.active {
+            transform: translateY(0);
+        }
+        .np-bg-blur {
+            position: absolute;
+            top: -50%; left: -50%; right: -50%; bottom: -50%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(80px) brightness(0.4);
+            z-index: 0;
+            opacity: 0.6;
+        }
+        .np-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .np-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .np-header i { font-size: 1.5rem; cursor: pointer; padding: 10px; margin:-10px; }
+        .np-header span { font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; }
+        
+        .np-media-wrapper {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            max-height: 50vh;
+            width: 100%;
+            max-width: 350px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .np-cover-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .np-cover-container.hidden { display: none; }
+        .np-cover {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            object-fit: cover;
+        }
+        
+        .np-lyrics-container {
+            display: none;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            text-align: center;
+            padding: 10px;
+            scroll-behavior: smooth;
+        }
+        .np-lyrics-container::-webkit-scrollbar { display: none; }
+        .np-lyrics-container.active { display: block; }
+        
+        .lyric-line {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .lyric-line.active {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        .view-toggle-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.3s;
+            z-index: 10;
+        }
+        .view-toggle-btn:active {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .np-info-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-top: auto;
+        }
+        .np-info {
+            overflow: hidden;
+            padding-right: 15px;
+        }
+        .np-info h2 { font-size: 1.5rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .np-info p { font-size: 1.1rem; color: var(--app-secondary-text); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .np-progress {
+            margin-bottom: 30px;
+        }
+        .np-progress-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            margin-bottom: 8px;
+        }
+        .np-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #fff;
+            border-radius: 2px;
+        }
+        .np-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--app-secondary-text);
+        }
+
+        .np-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .np-controls i {
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+        }
+        .np-controls i.secondary { color: var(--app-secondary-text); font-size: 1.3rem; }
+        .np-play-btn {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: #fff;
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+        .np-play-btn i { color: #000; }
+        .np-play-btn:active { transform: scale(0.95); }
+
+    </style>
+</head>
+<body>
+
+    <div id="status-light"></div>
+
+    <!-- VIEW: INICIO -->
+    <div id="view-inicio" class="view-container active">
+        <div class="header" style="padding-left:0; padding-right:0;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #1db954; color: #000; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1rem;">R</div>
+            <h1>Inicio</h1>
+        </div>
+
+        <div class="filter-pills">
+            <div class="filter-pill active" onclick="sendCommand('vol_down')"><i class="fa-solid fa-volume-low"></i> Vol-</div>
+            <div class="filter-pill active" onclick="sendCommand('vol_up')"><i class="fa-solid fa-volume-high"></i> Vol+</div>
+            <div class="filter-pill" onclick="sendCommand('prev')"><i class="fa-solid fa-backward-step"></i> Ant</div>
+        </div>
+
+        <h2 class="section-title">Top Escuchados</h2>
+        <div class="horizontal-scroll" id="remote-top-tracks">
+            <p style="color:var(--app-secondary-text); font-size:0.9rem;">Cargando...</p>
+        </div>
+
+        <h2 class="section-title">Estilos Musicales</h2>
+        <div class="grid-container" id="remote-genres">
+            <p style="color:var(--app-secondary-text); font-size:0.9rem; grid-column:span 2;">Cargando...</p>
+        </div>
+    </div>
+
+    <!-- VIEW: BUSCAR -->
+    <div id="view-search" class="view-container">
+        <div class="header" style="padding-left:0; padding-right:0;">
+            <h1>Buscar</h1>
+        </div>
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="remote-search" placeholder="¿Qué quieres escuchar?" autocomplete="off">
+        </div>
+        <div id="remote-search-results">
+            <p style="color:var(--app-secondary-text); text-align:center; margin-top:30px; font-weight:700;">Explora todo el catálogo</p>
+        </div>
+    </div>
+
+    <!-- VIEW: BIBLIOTECA -->
+    <div id="view-library" class="view-container">
+        <div class="header" style="padding-left:0; padding-right:0; margin-bottom:10px;">
+            <button id="btn-lib-back" class="btn-back" style="display:none;"><i class="fa-solid fa-arrow-left"></i></button>
+            <h1 id="lib-main-title">Tu biblioteca</h1>
+        </div>
+        
+        <div id="remote-library-content">
+            <!-- Content populated by JS -->
+        </div>
+    </div>
+
+    <!-- MINI PLAYER -->
+    <div class="mini-player" id="mini-player">
+        <img src="https://ui-avatars.com/api/?name=Rocola&background=181818&color=b3b3b3" id="mp-cover" class="mp-cover">
+        <div class="mp-info">
+            <h4 id="mp-title">Sin reproducción</h4>
+            <p id="mp-artist">Conéctate a la rocola</p>
+        </div>
+        <div class="mp-controls">
+            <i class="fa-solid fa-play" id="mp-play" onclick="sendCommand('play_pause')"></i>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchView('inicio', this)">
+            <i class="fa-solid fa-house"></i>
+            <span>Inicio</span>
+        </div>
+        <div class="nav-item" onclick="switchView('search', this)">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Buscar</span>
+        </div>
+        <div class="nav-item" onclick="switchView('library', this)">
+            <i class="fa-solid fa-bars-staggered"></i>
+            <span>Tu biblioteca</span>
+        </div>
+    </div>
+
+    <!-- NOW PLAYING OVERLAY -->
+    <div class="now-playing-overlay" id="now-playing-overlay">
+        <div class="np-bg-blur" id="np-bg-blur"></div>
+        <div class="np-content">
+            <div class="np-header">
+                <i class="fa-solid fa-chevron-down" onclick="toggleNowPlaying(false)"></i>
+                <span id="np-context-title">REPRODUCIENDO EN ROCOLA</span>
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </div>
+            <div class="np-media-wrapper">
+                <div class="np-cover-container" id="np-cover-container" onclick="toggleCoverLyrics()">
+                    <img src="https://ui-avatars.com/api/?name=Rocola&background=181818&color=b3b3b3" id="np-large-cover" class="np-cover">
+                </div>
+                
+                <div class="np-lyrics-container" id="np-lyrics-container" onclick="toggleCoverLyrics()">
+                    <!-- Lyrics populated here -->
+                </div>
+                
+                <div id="np-view-toggle" class="view-toggle-btn" onclick="toggleCoverLyrics(event)">LETRAS</div>
+            </div>
+            
+            <div class="np-info-section">
+                <div class="np-info">
+                    <h2 id="np-large-title">Sin reproducción</h2>
+                    <p id="np-large-artist">Conéctate a la rocola</p>
+                </div>
+                <i class="fa-regular fa-heart" id="np-heart" style="font-size:1.6rem; color:var(--app-secondary-text); cursor:pointer;" onclick="toggleHeart(this)"></i>
+            </div>
+            
+            <div class="np-progress">
+                <div class="np-progress-bar" id="np-progress-bar" onclick="seekFromRemote(event)">
+                    <div class="np-progress-fill" style="width: 0%;" id="np-progress-fill"></div>
+                </div>
+                <div class="np-time">
+                    <span id="np-time-current">0:00</span>
+                    <span id="np-time-total">-:-</span>
+                </div>
+            </div>
+            
+            <div class="np-controls">
+                <i class="fa-solid fa-shuffle secondary" id="np-shuffle" onclick="sendCommand('toggle_shuffle'); if(navigator.vibrate) navigator.vibrate(50);"></i>
+                <i class="fa-solid fa-backward-step" onclick="sendCommand('prev'); if(navigator.vibrate) navigator.vibrate(50);"></i>
+                <div class="np-play-btn" onclick="sendCommand('play_pause'); if(navigator.vibrate) navigator.vibrate(50);">
+                    <i class="fa-solid fa-play" id="np-large-play"></i>
+                </div>
+                <i class="fa-solid fa-forward-step" onclick="sendCommand('next'); if(navigator.vibrate) navigator.vibrate(50);"></i>
+                <i class="fa-solid fa-repeat secondary" id="np-repeat" onclick="sendCommand('toggle_repeat'); if(navigator.vibrate) navigator.vibrate(50);"></i>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/remote.js"></script>
+</body>
+</html>

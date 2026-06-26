@@ -1,0 +1,21 @@
+{
+  "name": "Rocola Remote",
+  "short_name": "Rocola",
+  "start_url": "remote.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://ui-avatars.com/api/?name=Rocola&background=fa243c&color=fff&size=192",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://ui-avatars.com/api/?name=Rocola&background=fa243c&color=fff&size=512",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

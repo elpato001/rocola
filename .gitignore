@@ -1,0 +1,6 @@
+/media/*
+!/media/.gitkeep
+/music/*
+!/music/.gitkeep
+/data/settings.json
+.vscode/
