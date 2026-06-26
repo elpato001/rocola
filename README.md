@@ -47,6 +47,9 @@ Para ejecutar Rocola Multimedia en tu entorno local o servidor, necesitarás:
    Mueve los archivos a la carpeta pública de tu servidor (por ejemplo, `c:\xampp\htdocs\rocola`).
 3. **Ejecutar el Asistente:**
    Abre tu navegador web y visita `http://localhost/rocola`. El sistema detectará automáticamente si la base de datos no está configurada y te redirigirá al **Asistente de Configuración**.
+
+   ![Asistente de Instalación](img/setup_wizard.png)
+
 4. **Agrega tus archivos:**
    Ve al panel de administrador en el sistema y define las rutas de tus bibliotecas de música, videos y karaoke. El escáner interno se encargará del resto.
 
