@@ -24,7 +24,7 @@
 *   **📱 Control Remoto PWA (Progressive Web App):** Controla la rocola desde tu teléfono móvil. Incluye controles completos de reproducción (Play, Pause, Seek, Shuffle, Repeat) sincronizados instantáneamente con la pantalla principal.
 *   **🎤 Soporte para Karaoke y Letras Sincronizadas:** Disfruta del modo Karaoke con descarga automatizada de letras y visualización sincronizada en tiempo real a medida que avanza la canción.
 *   **💿 Animaciones Auténticas:** Experiencia visual mejorada con animaciones de "tocadiscos" (el brazo de la aguja y el disco de vinilo giran y avanzan de manera realista durante la reproducción).
-*   **🤖 Metadatos Automatizados (Integración Deezer):** El sistema escanea los archivos y utiliza la API de Deezer para descargar automáticamente metadatos de las pistas y portadas de álbumes de alta calidad.
+*   **🤖 Metadatos Automatizados:** El sistema escanea los archivos y descarga automáticamente metadatos de las pistas y portadas de álbumes de alta calidad.
 *   **⚙️ Asistente de Instalación Inteligente (Wizard):** Configuración automática e intuitiva. Si detecta un fallo en la base de datos, inicia el asistente para guiarte en el proceso de conexión y configuración inicial sin tocar código.
 *   **🏗️ Arquitectura Modular (SPA):** Navegación fluida e ininterrumpida de la música mientras navegas por diferentes módulos (Dashboard, Música, Configuración).
 
@@ -68,7 +68,7 @@ No necesitas buscar letras manualmente. El usuario solo debe poner a reproducir 
 
 ## 📱 Control Remoto PWA
 
-El sistema incluye un control remoto progresivo (PWA) diseñado para usarse desde tu teléfono móvil sin necesidad de instalar aplicaciones en las tiendas (App Store/Play Store).
+El sistema incluye un control remoto progresivo (PWA) diseñado para usarse desde tu teléfono móvil sin necesidad de instalar aplicaciones adicionales.
 
 **Conexión Fácil y Rápida:**
 Simplemente escanea el código QR que aparece en la aplicación principal para vincular tu dispositivo instantáneamente con el reproductor activo.
@@ -89,7 +89,7 @@ Además de los controles de reproducción, el control remoto te permite visualiz
 
 ```text
 rocola/
-├── api/             # Endpoints (PHP) para base de datos, Deezer API y escáner de medios
+├── api/             # Endpoints (PHP) para base de datos, metadatos y escáner de medios
 ├── css/             # Hojas de estilo estructuradas para el tema dinámico
 ├── js/              # Lógica del frontend (SPA, sincronización, animaciones de vinilo)
 ├── lib/             # Librerías externas (ej. getID3 para leer metadatos locales)
@@ -106,7 +106,7 @@ rocola/
 *   **Backend:** PHP (PDO, Endpoints REST)
 *   **Frontend:** HTML5, CSS3 (Animaciones, Variables CSS dinámicas, Flexbox/Grid), JavaScript Vanilla
 *   **Base de datos:** MySQL / MariaDB
-*   **APIs y Librerías:** Deezer API (Metadatos), getID3 (Lectura de archivos de audio)
+*   **Librerías:** getID3 (Lectura de archivos de audio)
 
 ## 🤝 Contribuir
 
