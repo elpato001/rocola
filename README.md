@@ -1,7 +1,7 @@
 <div align="center">
   <h1>🎵 Rocola Multimedia</h1>
   <p>
-    <strong>Un sistema de rocola (jukebox) moderno, profesional y modular.</strong>
+    <strong>Un sistema web de rocola (jukebox) modular.</strong>
   </p>
 </div>
 
@@ -16,11 +16,11 @@
 
 ## 📖 Descripción
 
-**Rocola Multimedia** es un sistema web avanzado diseñado para gestionar y reproducir tu biblioteca de medios (Música, Karaoke y Videos) con una interfaz de usuario espectacular y de alta gama. Inspirado en plataformas de streaming modernas como Spotify, este proyecto no solo ofrece una experiencia de reproducción fluida y continua (gracias a su arquitectura SPA), sino que también cuenta con un panel administrativo completo y un control remoto web optimizado para dispositivos móviles.
+**Rocola Multimedia** es un sistema web diseñado para gestionar y reproducir tu biblioteca de medios locales (Música, Karaoke y Videos). El proyecto ofrece una experiencia de reproducción continua mediante una arquitectura SPA (Single Page Application) e incluye un panel administrativo y un control remoto web adaptado para dispositivos móviles.
 
 ## ✨ Características Principales
 
-*   **🎨 Diseño Premium y Modo Ambiente Dinámico:** La interfaz extrae el color dominante de la carátula de la pista en reproducción y ajusta toda la paleta de colores de la aplicación y del visualizador en tiempo real.
+*   **🎨 Modo Ambiente Dinámico:** La interfaz extrae el color dominante de la carátula de la pista en reproducción y ajusta la paleta de colores de la aplicación y del visualizador en tiempo real.
 *   **📱 Control Remoto PWA (Progressive Web App):** Controla la rocola desde tu teléfono móvil. Incluye controles completos de reproducción (Play, Pause, Seek, Shuffle, Repeat) sincronizados instantáneamente con la pantalla principal.
 *   **🎤 Soporte para Karaoke y Letras Sincronizadas:** Disfruta del modo Karaoke con descarga automatizada de letras y visualización sincronizada en tiempo real a medida que avanza la canción.
 *   **💿 Animaciones Auténticas:** Experiencia visual mejorada con animaciones de "tocadiscos" (el brazo de la aguja y el disco de vinilo giran y avanzan de manera realista durante la reproducción).
@@ -46,7 +46,7 @@ Para ejecutar Rocola Multimedia en tu entorno local o servidor, necesitarás:
 2. **Ubicación de archivos:**
    Mueve los archivos a la carpeta pública de tu servidor (por ejemplo, `c:\xampp\htdocs\rocola`).
 3. **Ejecutar el Asistente:**
-   Abre tu navegador de preferencia y visita `http://localhost/rocola`. El sistema detectará automáticamente si la base de datos no está configurada y te redirigirá a un **Asistente de Configuración** con un diseño moderno.
+   Abre tu navegador web y visita `http://localhost/rocola`. El sistema detectará automáticamente si la base de datos no está configurada y te redirigirá al **Asistente de Configuración**.
 4. **Agrega tus archivos:**
    Ve al panel de administrador en el sistema y define las rutas de tus bibliotecas de música, videos y karaoke. El escáner interno se encargará del resto.
 
