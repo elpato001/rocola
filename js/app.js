@@ -2539,6 +2539,32 @@ function startRemotePolling() {
                         if (typeof app.syncStateToRemote === 'function') {
                             app.syncStateToRemote();
                         }
+                        const modal = document.getElementById('remote-modal');
+                        if (modal && !modal.classList.contains('hidden')) {
+                            modal.classList.add('hidden');
+                            
+                            let toast = document.getElementById('remote-toast');
+                            if (!toast) {
+                                toast = document.createElement('div');
+                                toast.id = 'remote-toast';
+                                toast.style.position = 'fixed';
+                                toast.style.bottom = '120px';
+                                toast.style.left = '50%';
+                                toast.style.transform = 'translateX(-50%)';
+                                toast.style.background = 'var(--accent)';
+                                toast.style.color = '#fff';
+                                toast.style.padding = '12px 24px';
+                                toast.style.borderRadius = '30px';
+                                toast.style.boxShadow = '0 5px 15px rgba(0,0,0,0.5)';
+                                toast.style.zIndex = '9999';
+                                toast.style.fontWeight = 'bold';
+                                toast.style.transition = 'opacity 0.3s ease';
+                                toast.innerHTML = '<i class="fa-solid fa-check-circle" style="margin-right:8px;"></i> Control Remoto Conectado';
+                                document.body.appendChild(toast);
+                            }
+                            toast.style.opacity = '1';
+                            setTimeout(() => toast.style.opacity = '0', 3000);
+                        }
                     }
                     else if(cmd === 'toggle_shuffle') {
                         if (typeof toggleShuffle === 'function') {
