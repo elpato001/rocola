@@ -46,22 +46,6 @@ function changeRemoteVolume(val) {
     }, 50);
 }
 
-let isSingerMode = false;
-function toggleSingerMode(force) {
-    const overlay = document.getElementById('singer-mode-overlay');
-    if (!overlay) return;
-    if (typeof force === 'boolean') {
-        isSingerMode = force;
-    } else {
-        isSingerMode = !isSingerMode;
-    }
-    if (isSingerMode) {
-        overlay.style.display = 'flex';
-    } else {
-        overlay.style.display = 'none';
-    }
-}
-
 const buttons = document.querySelectorAll('.filter-pill, .nav-item, .card, .grid-item');
 buttons.forEach(btn => {
     btn.addEventListener('touchstart', () => {
@@ -127,13 +111,6 @@ function updateMiniPlayer(item) {
     
     // Load lyrics
     loadLyricsForRemote(item);
-    
-    // Auto Singer Mode for Karaoke
-    if (item.type === 'karaoke') {
-        toggleSingerMode(true);
-    } else {
-        toggleSingerMode(false);
-    }
 }
 
 let remoteCurrentTime = 0;
@@ -367,16 +344,6 @@ function pollState() {
                     if (volSlider && document.activeElement !== volSlider) {
                         volSlider.value = state.volume;
                     }
-                }
-                
-                // Singer Mode Info Update
-                if (state.item) {
-                    const singerTitle = document.getElementById('singer-title');
-                    if (singerTitle) singerTitle.textContent = state.item.name || 'Desconocido';
-                    const singerArtist = document.getElementById('singer-artist');
-                    if (singerArtist) singerArtist.textContent = state.item.artista || '';
-                    const sIcon = document.getElementById('singer-play-icon');
-                    if (sIcon) sIcon.className = remoteIsPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play';
                 }
             }
         })
