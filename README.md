@@ -66,6 +66,25 @@ No necesitas buscar letras manualmente. El usuario solo debe poner a reproducir 
 * **Uso Offline:** Una vez descargadas, las letras se guardan automáticamente en tu equipo, por lo que estarán disponibles para su uso sin conexión a internet en el futuro.
 * **Descarga Masiva:** Si deseas preparar el sistema para usarlo completamente offline, puedes ir al panel de configuración y ejecutar la opción de descargar todas las letras de tu biblioteca de una sola vez.
 
+## 📱 Control Remoto PWA
+
+El sistema incluye un control remoto progresivo (PWA) diseñado para usarse desde tu teléfono móvil sin necesidad de instalar aplicaciones en las tiendas (App Store/Play Store).
+
+**Conexión Fácil y Rápida:**
+Simplemente escanea el código QR que aparece en la aplicación principal para vincular tu dispositivo instantáneamente con el reproductor activo.
+
+![Conexión por Código QR](img/qr.PNG)
+
+**Interfaz Sincronizada en Tiempo Real:**
+Una vez conectado, tu teléfono mostrará la carátula de la pista en reproducción. Tienes acceso total para pausar, cambiar de canción, ajustar el volumen y controlar la cola de reproducción con latencia cero.
+
+![Interfaz del Control Remoto](img/remotoA.PNG)
+
+**Letras en la Palma de tu Mano:**
+Además de los controles de reproducción, el control remoto te permite visualizar las letras de la canción perfectamente sincronizadas en tu pantalla, ideal para seguir la música desde cualquier lugar de la habitación.
+
+![Letras Sincronizadas en el Control](img/remotoB.PNG)
+
 ## 📂 Estructura del Proyecto
 
 ```text
