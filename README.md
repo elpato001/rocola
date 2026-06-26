@@ -1,4 +1,5 @@
 <div align="center">
+  <img src="img/banner.png" alt="Rocola Multimedia Banner" width="100%" style="border-radius: 8px; margin-bottom: 20px;">
   <h1>🎵 Rocola Multimedia</h1>
   <p>
     <strong>Un sistema web de rocola (jukebox) modular.</strong>
