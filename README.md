@@ -55,6 +55,17 @@ Para ejecutar Rocola Multimedia en tu entorno local o servidor, necesitarás:
 
    ![Configuración de Bibliotecas](img/library_config.png)
 
+## 🎵 Reproductor y Sincronización de Letras
+
+El sistema cuenta con un reproductor inmersivo diseñado para ofrecer la mejor experiencia visual y auditiva. 
+
+![Reproductor Rocola](img/reproductor.png)
+
+**Gestión de Letras Automatizada:**
+No necesitas buscar letras manualmente. El usuario solo debe poner a reproducir una canción y la aplicación se encarga de buscar, descargar y sincronizar las letras en tiempo real. 
+* **Uso Offline:** Una vez descargadas, las letras se guardan automáticamente en tu equipo, por lo que estarán disponibles para su uso sin conexión a internet en el futuro.
+* **Descarga Masiva:** Si deseas preparar el sistema para usarlo completamente offline, puedes ir al panel de configuración y ejecutar la opción de descargar todas las letras de tu biblioteca de una sola vez.
+
 ## 📂 Estructura del Proyecto
 
 ```text
