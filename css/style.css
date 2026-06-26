@@ -648,6 +648,30 @@ body:has(.queue-panel:not(.hidden)) .music-visualizer {
 
 .fullscreen-overlay:hover .video-info-overlay { opacity: 1; }
 
+/* Up Next Overlay (Netflix Style) */
+.up-next-overlay {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    background: rgba(20, 20, 20, 0.9);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    z-index: 5020;
+    transform: translateX(120%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.2), opacity 0.6s ease;
+}
+
+.up-next-overlay.show {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
 /* Admin Layout */
 .admin-layout {
     display: flex;

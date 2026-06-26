@@ -1479,6 +1479,36 @@ const app = (() => {
             tonearm.style.transform = `rotate(${currentAngle}deg)`;
         }
         
+        // Up Next Overlay (Netflix Style)
+        const upNextOverlay = document.getElementById('up-next-overlay');
+        if (upNextOverlay && isPlaying && currentIndex !== -1 && (queue[currentIndex].type === 'video' || queue[currentIndex].type === 'karaoke') && e.srcElement === videoPlayer) {
+            const timeRemaining = duration - currentTime;
+            if (timeRemaining <= 10 && timeRemaining > 0 && queue.length > currentIndex + 1) {
+                const nextItem = queue[currentIndex + 1];
+                
+                if (!upNextOverlay.classList.contains('show')) {
+                    document.getElementById('up-next-title').textContent = nextItem.name || 'Desconocido';
+                    document.getElementById('up-next-artist').textContent = nextItem.artista || '';
+                    
+                    const coverEl = document.getElementById('up-next-cover');
+                    if (nextItem.portada && !nextItem.portada.includes('ui-avatars')) {
+                        coverEl.innerHTML = `<img src="${nextItem.portada}" style="width:100%;height:100%;object-fit:cover;">`;
+                    } else {
+                        const icon = nextItem.type === 'music' ? 'fa-music' : (nextItem.type === 'karaoke' ? 'fa-microphone' : 'fa-film');
+                        coverEl.innerHTML = `<i class="fa-solid ${icon}"></i>`;
+                    }
+                    
+                    upNextOverlay.classList.add('show');
+                }
+                
+                document.getElementById('up-next-timer').textContent = `en ${Math.ceil(timeRemaining)}s`;
+            } else {
+                if (upNextOverlay.classList.contains('show')) upNextOverlay.classList.remove('show');
+            }
+        } else if (upNextOverlay && (!isPlaying || currentIndex === -1 || (queue[currentIndex] && queue[currentIndex].type === 'music'))) {
+            if (upNextOverlay.classList.contains('show')) upNextOverlay.classList.remove('show');
+        }
+
         // Synced lyrics update
         if (currentSyncedLyrics.length > 0 && e.srcElement === audioPlayer) {
             let activeIdx = -1;

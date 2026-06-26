@@ -122,4 +122,15 @@
         <h2 id="fs-title">Title</h2>
         <p id="fs-artist">Artist</p>
     </div>
+    
+    <div id="up-next-overlay" class="up-next-overlay">
+        <p style="color: #aaa; font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">A continuación <span id="up-next-timer" style="color: #fff;">en 10s</span></p>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <div id="up-next-cover" style="width: 60px; height: 60px; border-radius: 8px; background: #333; display: flex; justify-content: center; align-items: center; overflow: hidden; font-size: 1.5rem; color: #111;"></div>
+            <div style="text-align: left;">
+                <h4 id="up-next-title" style="margin: 0; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; color: #fff;">Title</h4>
+                <p id="up-next-artist" style="margin: 0; color: #aaa; font-size: 0.9rem; margin-top: 3px;">Artist</p>
+            </div>
+        </div>
+    </div>
 </div>
