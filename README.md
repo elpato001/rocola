@@ -39,10 +39,10 @@ Para ejecutar Rocola Multimedia en tu entorno local o servidor, necesitarás:
 
 ## 🛠️ Instalación y Configuración
 
-1. **Clonar el repositorio:**
-   ```bash
-   git clone https://github.com/elpato001/rocola.git
-   ```
+1. **Descargar el proyecto:**
+   Haz clic en el botón verde **`<> Code`** en la parte superior de esta página y selecciona **Download ZIP**. Luego, extrae el contenido del archivo `.zip` en tu equipo.
+
+   ![Descargar ZIP](img/download_zip.png)
 2. **Ubicación de archivos:**
    Mueve los archivos a la carpeta pública de tu servidor (por ejemplo, `c:\xampp\htdocs\rocola`).
 3. **Ejecutar el Asistente:**
