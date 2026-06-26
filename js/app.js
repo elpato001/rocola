@@ -1138,16 +1138,23 @@ const app = (() => {
                                 // Parse synced lyrics
                                 const lines = data.syncedLyrics.split('\n');
                                 lines.forEach(line => {
-                                    const match = line.match(/\[(\d{2}):(\d{2})\.(\d{2,3})\](.*)/);
-                                    if (match) {
+                                    const timeRegex = /\[(\d{2}):(\d{2})\.(\d{1,3})\]/g;
+                                    let match;
+                                    const tags = [];
+                                    while ((match = timeRegex.exec(line)) !== null) {
                                         const mins = parseInt(match[1]);
                                         const secs = parseInt(match[2]);
                                         const ms = parseInt(match[3].padEnd(3, '0'));
-                                        const time = mins * 60 + secs + ms / 1000;
-                                        const text = match[4].trim();
-                                        if (text) currentSyncedLyrics.push({ time, text });
+                                        tags.push(mins * 60 + secs + ms / 1000);
+                                    }
+                                    if (tags.length > 0) {
+                                        const text = line.replace(/\[\d{2}:\d{2}\.\d{1,3}\]/g, '').trim();
+                                        if (text) {
+                                            tags.forEach(time => currentSyncedLyrics.push({ time, text }));
+                                        }
                                     }
                                 });
+                                currentSyncedLyrics.sort((a, b) => a.time - b.time);
                                 
                                 if (currentSyncedLyrics.length > 0) {
                                     lyricsContent.innerHTML = '';
