@@ -206,7 +206,7 @@ function loadLyricsForRemote(item) {
     container.innerHTML = '<p style="color:var(--app-secondary-text); margin-top:20px;">Buscando letras...</p>';
     currentLyrics = [];
     
-    fetch(`api/lyrics.php?artist=${encodeURIComponent(item.artista)}&title=${encodeURIComponent(item.name || item.titulo)}`)
+    fetch(`api/lyrics.php?artist=${encodeURIComponent(item.artista || '')}&title=${encodeURIComponent(item.name || item.titulo || '')}`)
         .then(res => res.json())
         .then(data => {
             if(data.found) {
@@ -225,15 +225,14 @@ function loadLyricsForRemote(item) {
 function parseSyncedLyrics(lrc) {
     const lines = lrc.split('\n');
     const synced = [];
-    const timeRegex = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
     lines.forEach(line => {
-        const match = timeRegex.exec(line);
+        const match = line.match(/\[(\d{2}):(\d{2})\.(\d{2,3})\](.*)/);
         if (match) {
-            const min = parseInt(match[1]);
-            const sec = parseInt(match[2]);
-            const ms = parseInt(match[3]);
-            const text = line.replace(timeRegex, '').trim();
-            const timeInSeconds = (min * 60) + sec + (ms / (ms > 99 ? 1000 : 100));
+            const mins = parseInt(match[1]);
+            const secs = parseInt(match[2]);
+            const ms = parseInt(match[3].padEnd(3, '0'));
+            const timeInSeconds = mins * 60 + secs + ms / 1000;
+            const text = match[4].trim();
             if(text) synced.push({ time: timeInSeconds, text });
         }
     });
