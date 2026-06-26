@@ -13,6 +13,7 @@ if (!file_exists($stateFile)) {
         'duration' => 0,
         'isShuffle' => false,
         'repeatMode' => 0,
+        'volume' => 1.0,
         'timestamp' => time() * 1000
     ]));
 }
@@ -26,6 +27,7 @@ if ($action === 'push') {
     $duration = floatval($_POST['duration'] ?? 0);
     $isShuffle = $_POST['isShuffle'] === 'true';
     $repeatMode = intval($_POST['repeatMode'] ?? 0);
+    $volume = floatval($_POST['volume'] ?? 1.0);
     
     $item = json_decode($itemStr, true);
     
@@ -36,6 +38,7 @@ if ($action === 'push') {
         'duration' => $duration,
         'isShuffle' => $isShuffle,
         'repeatMode' => $repeatMode,
+        'volume' => $volume,
         'timestamp' => round(microtime(true) * 1000)
     ];
     

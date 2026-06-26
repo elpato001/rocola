@@ -994,6 +994,7 @@ const app = (() => {
         formData.append('duration', player && !isNaN(player.duration) ? player.duration : 0);
         formData.append('isShuffle', isShuffle ? 'true' : 'false');
         formData.append('repeatMode', repeatMode);
+        formData.append('volume', player ? player.volume : 1);
         
         fetch('api/state.php?action=push', { method: 'POST', body: formData }).catch(e=>console.log(e));
     }
@@ -2528,12 +2529,22 @@ function startRemotePolling() {
                         const videoPlayer = document.getElementById('video-player');
                         if(audioPlayer) audioPlayer.volume = Math.min(1, audioPlayer.volume + 0.1);
                         if(videoPlayer) videoPlayer.volume = Math.min(1, videoPlayer.volume + 0.1);
+                        if (typeof app.syncStateToRemote === 'function') app.syncStateToRemote();
                     }
                     else if(cmd === 'vol_down') {
                         const audioPlayer = document.getElementById('audio-player');
                         const videoPlayer = document.getElementById('video-player');
                         if(audioPlayer) audioPlayer.volume = Math.max(0, audioPlayer.volume - 0.1);
                         if(videoPlayer) videoPlayer.volume = Math.max(0, videoPlayer.volume - 0.1);
+                        if (typeof app.syncStateToRemote === 'function') app.syncStateToRemote();
+                    }
+                    else if(cmd === 'set_volume') {
+                        const targetVol = parseFloat(val);
+                        const audioPlayer = document.getElementById('audio-player');
+                        const videoPlayer = document.getElementById('video-player');
+                        if(audioPlayer && !isNaN(targetVol)) audioPlayer.volume = targetVol;
+                        if(videoPlayer && !isNaN(targetVol)) videoPlayer.volume = targetVol;
+                        if (typeof app.syncStateToRemote === 'function') app.syncStateToRemote();
                     }
                     else if(cmd === 'request_state') {
                         if (typeof app.syncStateToRemote === 'function') {

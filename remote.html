@@ -670,10 +670,10 @@
                 <i class="fa-solid fa-repeat secondary" id="np-repeat" onclick="sendCommand('toggle_repeat'); if(navigator.vibrate) navigator.vibrate(50);"></i>
             </div>
             
-            <div class="np-volume-controls" style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 0 10px;">
-                <i class="fa-solid fa-volume-low" style="font-size: 1.2rem; color: var(--app-secondary-text); cursor: pointer; padding: 10px;" onclick="sendCommand('vol_down'); if(navigator.vibrate) navigator.vibrate(50);"></i>
-                <div style="flex-grow: 1; text-align: center; font-size: 0.75rem; color: var(--app-secondary-text); letter-spacing: 1.5px; font-weight: bold;">VOLUMEN</div>
-                <i class="fa-solid fa-volume-high" style="font-size: 1.2rem; color: var(--app-secondary-text); cursor: pointer; padding: 10px;" onclick="sendCommand('vol_up'); if(navigator.vibrate) navigator.vibrate(50);"></i>
+            <div class="np-volume-controls" style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 0 10px; gap: 15px;">
+                <i class="fa-solid fa-volume-low" style="font-size: 1.1rem; color: var(--app-secondary-text);" onclick="sendCommand('vol_down'); if(navigator.vibrate) navigator.vibrate(50);"></i>
+                <input type="range" id="remote-volume-slider" min="0" max="1" step="0.01" value="1" style="flex-grow: 1; accent-color: #fff; cursor: pointer;" oninput="changeRemoteVolume(this.value)">
+                <i class="fa-solid fa-volume-high" style="font-size: 1.1rem; color: var(--app-secondary-text);" onclick="sendCommand('vol_up'); if(navigator.vibrate) navigator.vibrate(50);"></i>
             </div>
         </div>
     </div>

@@ -38,6 +38,14 @@ function sendCommand(cmd, val = '') {
     });
 }
 
+let volumeTimeout;
+function changeRemoteVolume(val) {
+    clearTimeout(volumeTimeout);
+    volumeTimeout = setTimeout(() => {
+        sendCommand('set_volume', val);
+    }, 50);
+}
+
 const buttons = document.querySelectorAll('.filter-pill, .nav-item, .card, .grid-item');
 buttons.forEach(btn => {
     btn.addEventListener('touchstart', () => {
@@ -317,6 +325,14 @@ function pollState() {
                     } else { // Repeat Off
                         repeatBtn.classList.replace('fa-repeat-1', 'fa-repeat');
                         repeatBtn.style.color = 'var(--app-secondary-text)';
+                    }
+                }
+                
+                // Sync Volume
+                if (state.volume !== undefined) {
+                    const volSlider = document.getElementById('remote-volume-slider');
+                    if (volSlider && document.activeElement !== volSlider) {
+                        volSlider.value = state.volume;
                     }
                 }
             }
