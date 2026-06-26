@@ -46,6 +46,22 @@ function changeRemoteVolume(val) {
     }, 50);
 }
 
+let isSingerMode = false;
+function toggleSingerMode(force) {
+    const overlay = document.getElementById('singer-mode-overlay');
+    if (!overlay) return;
+    if (typeof force === 'boolean') {
+        isSingerMode = force;
+    } else {
+        isSingerMode = !isSingerMode;
+    }
+    if (isSingerMode) {
+        overlay.classList.remove('hidden');
+    } else {
+        overlay.classList.add('hidden');
+    }
+}
+
 const buttons = document.querySelectorAll('.filter-pill, .nav-item, .card, .grid-item');
 buttons.forEach(btn => {
     btn.addEventListener('touchstart', () => {
@@ -204,8 +220,17 @@ function toggleCoverLyrics() {
         if(toggleBtn) toggleBtn.textContent = 'PORTADA';
     } else {
         document.getElementById('np-cover-container').classList.remove('hidden');
-        document.getElementById('np-lyrics-container').classList.remove('active');
-        if(toggleBtn) toggleBtn.textContent = 'LETRAS';
+        document.getElementById('np-lyrics-container').style.display = 'none';
+        document.getElementById('np-view-toggle').textContent = 'LETRAS';
+        
+        if (state.item.type === 'karaoke') {
+            toggleSingerMode(true);
+        } else {
+            toggleSingerMode(false);
+        }
+        
+        // Load Cover
+        const npCover = document.getElementById('np-large-cover');
     }
 }
 
@@ -341,6 +366,16 @@ function pollState() {
                     if (volSlider && document.activeElement !== volSlider) {
                         volSlider.value = state.volume;
                     }
+                }
+                
+                // Singer Mode Info Update
+                if (state.item) {
+                    const singerTitle = document.getElementById('singer-title');
+                    if (singerTitle) singerTitle.textContent = state.item.name || 'Desconocido';
+                    const singerArtist = document.getElementById('singer-artist');
+                    if (singerArtist) singerArtist.textContent = state.item.artista || '';
+                    const sIcon = document.getElementById('singer-play-icon');
+                    if (sIcon) sIcon.className = remoteIsPlaying ? 'fa-solid fa-pause' : 'fa-solid fa-play';
                 }
             }
         })

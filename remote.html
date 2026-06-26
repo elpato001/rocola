@@ -677,6 +677,34 @@
             </div>
         </div>
     </div>
+    
+    <!-- Singer Mode Overlay -->
+    <div id="singer-mode-overlay" class="overlay hidden" style="background: linear-gradient(135deg, #111, #3a0088); z-index: 2500; display: flex; flex-direction: column; height: 100vh; position: fixed; top: 0; left: 0; right: 0; bottom: 0;">
+        <div class="np-header" style="justify-content: center; position: relative; padding: 20px;">
+            <i class="fa-solid fa-microphone" style="font-size: 2rem; color: #fff;"></i>
+            <span style="position:absolute; right:20px; top:25px; font-size: 2rem; color: rgba(255,255,255,0.5); cursor: pointer; line-height: 1;" onclick="toggleSingerMode(false)">&times;</span>
+        </div>
+        
+        <div style="text-align: center; padding: 20px; margin-top: 20px;">
+            <p style="color: rgba(255,255,255,0.6); font-weight: 800; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; font-size: 0.85rem;">Estás cantando</p>
+            <h2 id="singer-title" style="font-size: 2.2rem; margin-bottom: 8px; font-weight: 800; text-shadow: 0 4px 10px rgba(0,0,0,0.5);">Title</h2>
+            <p id="singer-artist" style="color: rgba(255,255,255,0.8); font-size: 1.2rem;">Artist</p>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; gap: 50px; padding-bottom: 60px;">
+            <div class="np-play-btn" style="width: 160px; height: 160px; font-size: 4rem; background: #fff; color: #3a0088; box-shadow: 0 15px 40px rgba(0,0,0,0.5);" onclick="sendCommand('play_pause'); if(navigator.vibrate) navigator.vibrate(50);">
+                <i class="fa-solid fa-pause" id="singer-play-icon"></i>
+            </div>
+            
+            <button style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 25px 40px; font-size: 1.4rem; border-radius: 50px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 15px; width: 80%; backdrop-filter: blur(10px);" onclick="sendCommand('next'); if(navigator.vibrate) navigator.vibrate(50);">
+                Siguiente <i class="fa-solid fa-forward-step"></i>
+            </button>
+            
+            <button style="background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 0.95rem; text-decoration: underline; margin-top: 10px; cursor: pointer;" onclick="toggleSingerMode(false)">
+                Ver controles normales
+            </button>
+        </div>
+    </div>
 
     <script src="js/remote.js"></script>
 </body>
